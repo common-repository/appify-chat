@@ -1,0 +1,230 @@
+<div id="plugin-settings">
+    <form method="POST" id="appify_chat-form" action="#" enctype="multipart/form-data">
+        <div class="container mt-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <figure>
+                        <blockquote class="blockquote">
+                            <h3> WhatsApp Chat Widget <small class="text-muted"> / Settings</small></h3>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            Developed by <cite title="Source Title">AppifyCommerce</cite>
+                        </figcaption>
+                    </figure>
+
+                    <span for="helptext" class="text-secondary">Plugin id:
+                        <kbd class="text-bg-info">{{pluginId}}</kbd>
+                    </span>
+                </div>
+                <div class="col-md-6 d-flex justify-content-end">
+                    <button type="button" class="btn btn-light me-3"
+                        onclick="window.open('https://www.appifycommerce.com/docs', '_blank');">
+                        FAQ / Help
+                    </button>
+                    <button type="button" class="btn btn-light me-3" id="save-btn-1"
+                        onclick="location.href='mailto:support@appifycommerce.com';">
+                        Contact us
+                    </button>
+                    <button type="submit" name="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <!-- Chat icon design -->
+                <div class="col-md-6">
+                    <span class="badge rounded-pill text-bg-dark" style="margin: 20px 0;">Chat icon design</span>
+                    <input type="hidden" id="acw-id" name="id" value="{{id}}">
+                    <input type="hidden" name="acw_settings_nonce" value="{{wpSettingsNonce}}">
+                    <input type="hidden" id="acw_site_url" name="acw_site_url" value="{{siteUrl}}">
+
+                    <!-- WhatsApp number -->
+                    <div class="mb-3">
+                        <label for="acw-number" class="form-label">WhatsApp number</label>
+                        <input name="acw-number" type="text" class="form-control" id="acw-number"
+                            placeholder="+1 999 999 9999" value="{{number}}" required
+                            oninput="event.preventDefault();handlePreview()">
+                    </div>
+
+                    <!-- Message -->
+                    <div class="mb-3">
+                        <label for="acw-message" class="form-label">Message</label>
+                        <textarea name="acw-message" id="acw-message"
+                            placeholder="Hey there, could you please assist me?" class="form-control" required
+                            oninput="event.preventDefault();handlePreview()">{{message}}</textarea>
+                    </div>
+
+                    <!-- Position -->
+                    <div class="mb-3">
+                        <label for="acw-position" class="form-label">Position</label>
+                        <input type="hidden" id="acw-position-value" value="{{position}}">
+                        <select name="acw-position" class="form-select" id="acw-position"
+                            onchange="event.preventDefault();handlePreview()">
+                            <option value='bottom_right'>Bottom right</option>
+                            <option value='bottom_left'>Bottom left</option>
+                            <option value='top_right'>Top right</option>
+                            <option value='top_left'>Top left</option>
+                        </select>
+                    </div>
+
+                    <!-- Horizontal space -->
+                    <div class="mb-3">
+                        <label for="horizontal_space" class="form-label">Horizontal space</label>
+                        <div class="slider-container d-flex">
+                            <input type="range" class="form-range slider" name="acw-hs" min="0" max="200"
+                                value="{{hSpace}}" step="2" id="acw-hs" oninput="handleOnInput('acw-hs', 'px')">
+                            <div class="slider-value mx-1" id="acw-hs-value"> {{hSpace}}px </div>
+                        </div>
+                    </div>
+
+                    <!-- Vertical space -->
+                    <div class="mb-3">
+                        <label for="vertical_space" class="form-label">Vertical space</label>
+                        <div class="slider-container d-flex">
+                            <input type="range" class="form-range slider" name="acw-vs" min="0" max="200"
+                                value="{{vSpace}}" step="2" id="acw-vs" oninput="handleOnInput('acw-vs', 'px')">
+                            <div class="slider-value mx-1" id="acw-vs-value"> {{vSpace}}px </div>
+                        </div>
+                    </div>
+
+                    <!-- Corner radius -->
+                    <div class="mb-3">
+                        <label for="corner_radius" class="form-label">Corner radius</label>
+                        <div class="slider-container d-flex">
+                            <input type="range" class="form-range slider corner-radius-slider" name="acw-corner-radius"
+                                min="0" max="200" value="{{cornerRadius}}" step="2" id="acw-corner-radius"
+                                oninput="handleOnInput('acw-corner-radius', 'px')">
+                            <div class="slider-value mx-1" id="acw-corner-radius-value">{{cornerRadius}}px</div>
+                        </div>
+                    </div>
+
+                    <!-- Icon -->
+                    <div class="mb-3">
+                        <label for="acw-icon" class="form-label">Custom Icon</label>
+                        <button type="button" class="btn btn-secondary" id="acw-icon-button">Select Image</button>
+                        <input class="form-control" type="hidden" id="acw-icon" name="acw-icon" value="{{iconPath}}"
+                            oninput="handlePreview()">
+                        <div id="image_preview_container" class="display-none">
+                            <img id="acw-icon-preview" src="{{iconPath}}" alt="Image Preview"
+                                class="img-fluid border rounded mt-2" style="height: 60px; width: 60px;"
+                                onchange="handlePreview()">
+                            <button type="button" name="acw-icon-remove-btn" id="acw-icon-remove-btn"
+                                class="btn btn-link link-danger" value="pressed"
+                                onclick="handleRemoveIcon()">Remove</button>
+                        </div>
+                    </div>
+
+                    <!-- Mobile link -->
+                    <div class="mb-3">
+                        <label for="acw-mobile-link" class="form-label">Mobile link</label>
+                        <input type="hidden" id="acw-mobile-link-value" value="{{mobileLink}}">
+                        <div class="d-flex" id="acw-mobile-link">
+                            <div>
+                                <input type="radio" id="acw-mobile-link-1" class="radio mt-0" name="acw-mobile-link"
+                                    value="whatsapp://" checked>
+                                <label class="text radio-label" for="whatsapp_radio">whatsapp://</label>
+                            </div>
+                            <div class="mx-5">
+                                <input type="radio" id="acw-mobile-link-2" name="acw-mobile-link" class="radio mt-0"
+                                    value="wa.me//">
+                                <label class="text radio-label" for="wa_radio">wa.me//</label>
+                            </div>
+                        </div>
+                        <span for="helptext" class="text-secondary small">
+                            <em>Mandatorily redirect visitors on WhatsApp app or web app in browser</em>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Message highlight box design -->
+                <div class="col-md-6">
+                    <span class="badge rounded-pill text-bg-dark" style="margin: 20px 0;">
+                        Message highlight box design
+                    </span>
+
+                    <!-- Top & bottom padding-->
+                    <div class="mb-3">
+                        <label for="acw-msg-box-tb-padding" class="form-label">Top & Bottom padding</label>
+                        <div class="slider-container d-flex">
+                            <input type="range" class="slider form-range" name="acw-msg-box-tb-padding" min="0"
+                                max="200" value="{{boxTbPadding}}" step="2" id="acw-msg-box-tb-padding"
+                                oninput="handleOnInput('acw-msg-box-tb-padding', 'px')">
+                            <div class="slider-value mx-1" id="acw-msg-box-tb-padding-value"> {{boxTbPadding}}px </div>
+                        </div>
+                    </div>
+
+                    <!-- Left & right padding -->
+                    <div class="mb-3">
+                        <label for="left_right_padding" class="form-label">Left & Right padding</label>
+                        <div class="slider-container d-flex">
+                            <input type="range" class="slider form-range" name="acw-msg-box-lr-padding" min="0"
+                                max="200" value="{{boxLrPadding}}" step="2" id="acw-msg-box-lr-padding"
+                                oninput="handleOnInput('acw-msg-box-lr-padding', 'px')">
+                            <div class="slider-value mx-1" id="acw-msg-box-lr-padding-value">{{boxLrPadding}}px</div>
+                        </div>
+                    </div>
+
+                    <!-- Border radius -->
+                    <div class="mb-3">
+                        <label for="acw-msg-box-border-radius" class="form-label">Border radius</label>
+                        <div class="slider-container d-flex">
+                            <input type="range" class="slider form-range" name="acw-msg-box-radius" min="0" max="200"
+                                value="{{boxRadius}}" step="2" id="acw-msg-box-radius"
+                                oninput="handleOnInput('acw-msg-box-radius', 'px')">
+                            <div class="slider-value mx-1" id="acw-msg-box-radius-value">{{boxRadius}}px</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <!-- Background color -->
+                        <div class="col mb-3">
+                            <label for="acw-msg-box-bgcolor" class="form-label">Background color</label>
+                            <input type="color" class="form-control form-control-color" id="acw-msg-box-bgcolor"
+                                value="{{bgColor}}" title="Choose your color" name="acw-msg-box-bgcolor"
+                                oninput="handleOnInput('acw-msg-box-bgcolor')">
+                            <label class="color-hex cursor-pointer" id="acw-msg-box-bgcolor-value"
+                                for="acw-msg-box-bgcolor-value">{{bgColor}}</label>
+                        </div>
+
+                        <!-- Font color -->
+                        <div class="col mb-3">
+                            <label for="acw-msg-box-font-color" class="form-label">Font color</label>
+                            <input type="color" class="form-control form-control-color" id="acw-msg-box-font-color"
+                                value="{{fontColor}}" title="Choose your color" name="acw-msg-box-font-color"
+                                oninput="handleOnInput('acw-msg-box-font-color')">
+                            <label class="color-hex cursor-pointer" id="acw-msg-box-font-color-value"
+                                for="acw-msg-box-font-color-value">{{fontColor}}</label>
+                        </div>
+
+                        <!-- Shadow color -->
+                        <div class="col mb-3">
+                            <label for="acw-msg-box-shadow-color" class="form-label">Shadow color</label>
+                            <input type="color" class="form-control form-control-color" id="acw-msg-box-shadow-color"
+                                value="{{shadowColor}}" title="Choose your color" name="acw-msg-box-shadow-color"
+                                oninput="handleOnInput('acw-msg-box-shadow-color')">
+                            <label class="color-hex cursor-pointer" id="acw-msg-box-shadow-color-value"
+                                for="acw-msg-box-shadow-color-value">{{shadowColor}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Preview Container -->
+    <div id="preview-container"></div>
+
+    <!-- Toast message -->
+    <div class="toast-container top-0 end-0 p-3 display-none">
+        <div class="toast align-items-center text-bg-primary border-0 fade show" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Welcome to WhatsApp Chat Widget! Developed by AppifyCommerce.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close" onclick="handleToast(false, '')"></button>
+            </div>
+        </div>
+    </div>
+</div>
